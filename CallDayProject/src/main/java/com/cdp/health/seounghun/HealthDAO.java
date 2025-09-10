@@ -1,5 +1,7 @@
 package com.cdp.health.seounghun;
 
-public class HealthDAO {
+import org.omg.CORBA.PRIVATE_MEMBER;
 
+public class HealthDAO {
+	private String name;
 }
