@@ -4,7 +4,9 @@
 PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cdp.health.mapper"></mapper>
+<mapper namespace="com.cdp.health.mapper.HealthMapper">
+  
+
 
 
 
@@ -22,7 +24,7 @@ PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
     <!-- 1. 특정 부위 운동 목록 조회 -->
     <select id="getExercisesByPart" parameterType="string" resultMap="exerciseResultMap">
         SELECT 
-            ex_id, ex_part, ex_name, target_muscle, effect, method, youtube_url
+            ex_id,ex_part,ex_name,target_muscle,effect,method,youtube_url
         FROM exercise
         WHERE ex_part = #{part}
     </select>
