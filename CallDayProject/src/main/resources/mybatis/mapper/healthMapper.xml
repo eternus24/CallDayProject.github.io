@@ -5,3 +5,59 @@ PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.cdp.health.mapper"></mapper>
+
+
+
+    <!-- Result Mapping (DB → DTO 매핑) -->
+    <resultMap id="exerciseResultMap" type="com.cdp.health.dto.ExerciseDTO">
+        <id property="exId" column="ex_id"/>
+        <result property="exPart" column="ex_part"/>
+        <result property="exName" column="ex_name"/>
+        <result property="targetMuscle" column="target_muscle"/>
+        <result property="effect" column="effect"/>
+        <result property="method" column="method"/>
+        <result property="youtubeUrl" column="youtube_url"/>
+    </resultMap>
+
+    <!-- 1. 특정 부위 운동 목록 조회 -->
+    <select id="getExercisesByPart" parameterType="string" resultMap="exerciseResultMap">
+        SELECT 
+            ex_id, ex_part, ex_name, target_muscle, effect, method, youtube_url
+        FROM exercise
+        WHERE ex_part = #{part}
+    </select>
+
+    <!-- 2. 특정 ID 운동 상세 정보 조회 -->
+    <select id="getExerciseById" parameterType="int" resultMap="exerciseResultMap">
+        SELECT 
+            ex_id, ex_part, ex_name, target_muscle, effect, method, youtube_url
+        FROM exercise
+        WHERE ex_id = #{exId}
+    </select>
+
+    <!-- 3. 운동 정보 삽입 -->
+    <insert id="insertExercise" parameterType="com.cdp.health.dto.ExerciseDTO" useGeneratedKeys="true" keyProperty="exId">
+        INSERT INTO exercise (ex_part, ex_name, target_muscle, effect, method, youtube_url)
+        VALUES (#{exPart}, #{exName}, #{targetMuscle}, #{effect}, #{method}, #{youtubeUrl})
+    </insert>
+
+    <!-- 4. 운동 정보 수정 -->
+    <update id="updateExercise" parameterType="com.cdp.health.dto.ExerciseDTO">
+        UPDATE exercise
+        SET 
+            ex_part = #{exPart},
+            ex_name = #{exName},
+            target_muscle = #{targetMuscle},
+            effect = #{effect},
+            method = #{method},
+            youtube_url = #{youtubeUrl}
+        WHERE ex_id = #{exId}
+    </update>
+
+    <!-- 5. 운동 정보 삭제 -->
+    <delete id="deleteExercise" parameterType="int">
+        DELETE FROM exercise
+        WHERE ex_id = #{exId}
+    </delete>
+
+</mapper>

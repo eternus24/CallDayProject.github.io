@@ -1,5 +1,6 @@
    
    9.16 시작 
+   
    4조 헬스 커뮤니티  프로젝트 
    
    지영 - 부위별 운동  
@@ -24,7 +25,7 @@ src/main/java
 
 src/main/resources
  └── mapper
-      └── exerciseMapper.xml               ← MyBatis SQL 매퍼
+      └── exerciseMapper.xml ← MyBatis SQL 매퍼
 
 Controller → Service → Mapper
 
