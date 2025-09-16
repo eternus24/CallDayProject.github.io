@@ -1,15 +1,14 @@
-package com.cdp.health.mapper;
+package com.cdp.health.exercise.service;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
 
 import com.cdp.health.dto.CalendarDTO;
 import com.cdp.health.dto.ExerciseDTO;
 
-@Mapper
-public interface HealthMapper {
-	
+//  Controller --> Service --> Mapper 흐름
+
+public interface ExerciseService {
+
 	// 특정 부위 운동 목록 조회
 	List<ExerciseDTO> getExercisesByPart(String part);
 
@@ -17,12 +16,11 @@ public interface HealthMapper {
 	ExerciseDTO getExerciseById(int exId);
 
 	// 운동 정보 삽입
-	void insertExercise(CalendarDTO dto);
+	 void insertExercise(CalendarDTO dto);
 
 	// 운동 정보 수정
-	void updateExercise(ExerciseDTO dto);
+	 void updateExercise(ExerciseDTO dto);
 
 	// 운동 정보 삭제
-	void deleteExercise(int exId);
+	 void deleteExercise(int exId);
 }
-	

@@ -12,7 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import com.cdp.health.user.UserSecurityService;
 
@@ -37,28 +39,46 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
+    
+    @Bean(name = "mvcHandlerMappingIntrospector")
+    public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+    	
+    	return new HandlerMappingIntrospector();
+    
+    }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-          .authorizeHttpRequests(auth -> auth
-              .requestMatchers("/css/**","/js/**","/img/**",
-                               "/user/login","/user/signup").permitAll()
-              .anyRequest().authenticated()
-          )
-          .formLogin(form -> form
-              .loginPage("/user/login")
-              .defaultSuccessUrl("/", true)
-              .permitAll()
-          )
-          .logout(logout -> logout
-              .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-              .logoutSuccessUrl("/")
-              .invalidateHttpSession(true)
-              .permitAll()
-          );
-        
-        return http.build();
+    public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+    	
+    	MvcRequestMatcher.Builder mvc = new MvcRequestMatcher.Builder(introspector);
+
+	    http
+	    .authorizeHttpRequests(auth -> auth
+	    .requestMatchers(
+	    mvc.pattern("/"),
+	    mvc.pattern("/index"),
+	    mvc.pattern("/login"),
+	    mvc.pattern("/signup"),
+	    mvc.pattern("/error"),
+	    mvc.pattern("/css/**"),
+	    mvc.pattern("/js/**"),
+	    mvc.pattern("/images/**"),
+	    mvc.pattern("/address/**"),
+	    mvc.pattern("/addr/**"),
+	    mvc.pattern("/api/public/**")
+	    ).permitAll()
+	    .anyRequest().authenticated()
+	    )
+	    .formLogin(login -> login
+	    .loginPage("/login")
+	    .defaultSuccessUrl("/", true) // 로그인 성공 시 메인 페이지로 이동
+	    .permitAll()
+	    )
+	    .logout(logout -> logout.logoutUrl("/logout"))
+	    .authenticationProvider(daoAuthenticationProvider());
+	
+	
+	    return http.build();
         
     }
 
